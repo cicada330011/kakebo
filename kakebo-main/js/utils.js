@@ -1,0 +1,1 @@
+export const money=(n,c="৳")=>c+Number(n||0).toLocaleString("en-BD",{maximumFractionDigits:2});export const uid=()=>Date.now()+"-"+Math.random().toString(16).slice(2);export const today=()=>new Date().toISOString().slice(0,10);
