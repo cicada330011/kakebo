@@ -15,3 +15,20 @@ const l=E.lend('savings',100,'A');assert.equal(state.savings.balance,140);assert
 E.repayLoan(l.id,40,'');assert.equal(state.savings.balance,180);assert.equal(state.savings.loansReceivable,60);
 const r=E.lend('cash',200,'B');assert.equal(state.wallets[0].balance,1000);E.repayLoan(r.id,50,'bkash');assert.equal(state.wallets[1].balance,540);assert.equal(r.remaining,150);
 console.log('Kakebo engine tests passed');
+// v0.4 transfer preview and separate borrowed-debt track
+assert.deepEqual(E.transferPreview(1500,20),{amount:1500,fee:20,targetGets:1480,valid:true});
+assert.equal(E.transferPreview(100,100).valid,false);
+const beforeIncome=E.incomeTotal(), beforeExpense=E.expenseTotal();
+const borrowed=E.borrow('cash',300,'Lender A','Short-term borrow');
+assert.equal(borrowed.direction,'borrowed');
+assert.equal(state.wallets[0].balance,1300);
+assert.equal(E.incomeTotal(),beforeIncome,'Borrowed money must not count as income');
+E.repayBorrowed(borrowed.id,100,'cash');
+assert.equal(state.wallets[0].balance,1200);
+assert.equal(borrowed.remaining,200);
+assert.equal(E.expenseTotal(),beforeExpense,'Debt repayment must not count as expense');
+E.repayBorrowed(borrowed.id,200,'cash');
+assert.equal(borrowed.status,'paid');
+assert.equal(E.borrowedOutstanding(),0);
+assert.throws(()=>E.addTransaction('expense',{amount:99999,walletId:'cash'}),/Not enough balance/);
+console.log('Kakebo v0.4 transfer and debt tests passed');
