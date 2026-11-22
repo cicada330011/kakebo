@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+globalThis.localStorage={setItem(){},getItem(){return null}};
+const {state,seed}=await import('../js/core/store.js');const E=await import('../js/core/engine.js');
+Object.assign(state,seed());
+E.addTransaction('income',{amount:2000,walletId:'cash',category:'Salary'});
+assert.equal(state.wallets[0].balance,2000);
+E.addTransaction('transfer',{amount:500,fromWalletId:'cash',toWalletId:'bkash',fee:10});
+assert.equal(state.wallets[0].balance,1500);assert.equal(state.wallets[1].balance,490);
+assert.equal(E.incomeTotal(),2000);assert.equal(E.expenseTotal(),10);
+E.addSavingsDeposit('cash',300);assert.equal(state.savings.balance,300);assert.equal(E.regularBalance(),1690);
+const p=E.withdrawSavings(100,'cash');assert.equal(state.savings.balance,200);assert.equal(p.remaining,100);
+E.returnToSavings(p.id,40);assert.equal(state.savings.balance,240);assert.equal(p.remaining,60);
+E.finalizePending(p.id);assert.equal(E.expenseTotal(),70);assert.equal(p.status,'finalized');
+const l=E.lend('savings',100,'A');assert.equal(state.savings.balance,140);assert.equal(state.savings.loansReceivable,100);
+E.repayLoan(l.id,40,'');assert.equal(state.savings.balance,180);assert.equal(state.savings.loansReceivable,60);
+const r=E.lend('cash',200,'B');assert.equal(state.wallets[0].balance,1000);E.repayLoan(r.id,50,'bkash');assert.equal(state.wallets[1].balance,540);assert.equal(r.remaining,150);
+console.log('Kakebo engine tests passed');

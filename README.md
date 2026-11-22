@@ -1,20 +1,22 @@
-# Kakebo v0.2 — Initial source package
+# Kakebo v0.3 — Functional finance core
 
-Fresh project, independent of the earlier Gemini app.
+This package is a replacement source bundle for the v0.2 starter. Extract it and upload the **contents** to the root of the `cicada330011/kakebo` repository, replacing the previous `index.html`, `css/`, and `js/` files when prompted. Do not upload the ZIP as the app.
 
-## Install
-Extract this ZIP into the root of the `kakebo` GitHub repository. The `index.html`, `css/`, and `js/` paths should be at repository root.
+## Implemented in this stage
+- Local browser persistence (localStorage)
+- Income, expense and wallet-to-wallet transfers (transfer fees supported)
+- Wallet creation and opening balances
+- Savings deposits, withdrawals with pending-return tracking, partial/full returns, and finalizing unreturned balance as an expense
+- Separate Savings loans receivable and regular-wallet loans receivable
+- Partial/full loan repayments
+- Custom income sources and expense categories
+- Dashboard, wallet list, transaction ledger, Savings, Debt/Loan and monthly summary views
+- Savings excluded from regular current balance; transfers are not counted as income/expense
+
+## Important limitations
+- Data is stored only in the current browser/device. Google account login, automatic cloud backup and restore are not implemented yet.
+- No production security, multi-device sync, export/import, recurring transactions, charts, credit-card statement logic, or transaction edit/delete in this stage.
+- This is a client-side prototype. Back up browser data before clearing site data.
 
 ## Run
-Use GitHub Pages or a local HTTP server. JavaScript uses ES modules, so do not open index.html via file://.
-
-## Implemented in this starter
-- Responsive dark/light-ready app shell, desktop sidebar and mobile bottom navigation
-- Dashboard with regular-wallet balance, income/expense totals, wallet cards and recent activity
-- Basic income, expense, wallet-to-wallet transfer, wallet creation
-- Separate savings available balance and savings-loan receivable display
-- Separate regular-wallet loan list
-- Local browser storage
-
-## Not complete yet
-This is a first development build, not a finished finance app. Repayments, borrowed-money workflows, savings withdrawals/pending-return handling, editable transactions, categories manager, monthly filters/charts, receipt/repeat/tax fields, Google OAuth/cloud backup, robust validation and full accounting tests are still to be built.
+Open `index.html` through a static web server or GitHub Pages. ES modules may not work from `file://` directly.
